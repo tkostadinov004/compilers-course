@@ -70,7 +70,7 @@ class Graph {
             stack: LinkedList <- new LinkedList in {
                 stack.add(startVertex);
                 while not (stack.isEmpty()) loop {
-                    let outp: Object <- stack.pop_back(), curr: Int <- reinterpret_cast_int(outp) in {
+                    let curr: Int <- reinterpret_cast_int(stack.pop_back()) in {
                         if visited.contains(curr) then {curr;} else {
                             result.add(curr);
                             visited.add(curr);
