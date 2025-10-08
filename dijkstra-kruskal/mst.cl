@@ -15,11 +15,10 @@ class MSTEdge {
     getWeight(): Int {weight};
 };
 
-class MST inherits IO {
+class MST {
     edges: LinkedList;
     edgesCount: Int;
     uf: UnionFind;
-    io: IO <- new IO;
 
     reinterpret_cast_linkedList(val: Object): LinkedList {{
         let dummy: LinkedList in {
