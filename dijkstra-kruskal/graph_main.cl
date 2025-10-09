@@ -21,7 +21,12 @@ class Main {
             graph.print();
 
             let src: Int <- io.in_int(), dest: Int <- io.in_int() in {
-                io.out_int(graph.dijkstra(src, dest)).out_string("\n");
+                io.out_string("shortest path from ")
+                    .out_int(src).out_string(" to ")
+                    .out_int(dest)
+                    .out_string(" has a weight of ")
+                    .out_int(graph.dijkstra(src, dest))
+                    .out_string("\n");
             };
 
             let mst: MST <- (new MST).init(edges, vertices) in {

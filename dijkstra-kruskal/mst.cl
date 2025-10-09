@@ -17,8 +17,7 @@ class MSTEdge {
 
 class MST {
     edges: LinkedList;
-    edgesCount: Int;
-    uf: UnionFind;
+    edgesCount: Int; -- the target amount of edges in the MST
 
     reinterpret_cast_linkedList(val: Object): LinkedList {{
         let dummy: LinkedList in {
@@ -59,7 +58,6 @@ class MST {
     init(iedges: LinkedList, verticesCount: Int): MST {{
         edges <- iedges; --copying only the pointer value (won't create an issue when using, unless original list is changed; would be a better approach to copy all data again)
         edgesCount <- verticesCount - 1;
-        uf <- (new UnionFind).init(verticesCount);
         self;
     }};
 
@@ -85,7 +83,7 @@ class MST {
     kruskal(): LinkedList {{
         sortEdges();
 
-        let result: LinkedList <- new LinkedList, i: Int <- 0 in {
+        let result: LinkedList <- new LinkedList, i: Int <- 0, uf: UnionFind <- (new UnionFind).init(edgesCount + 1) in {
             while not (edges.getSize() <= i) loop {
                 if not (edges.getSize() <= edgesCount) then {
                         let curr: MSTEdge <- reinterpret_cast_edge(edges.at(i)) in {
