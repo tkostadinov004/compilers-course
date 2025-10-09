@@ -1,5 +1,6 @@
 class Node { 
--- the type of values in each node is Object. The main advantage of keeping data this way is that we reduce code duplication, as there are LinkedList instances that store integers,
+-- the type of values in each node is Object. The main advantage of keeping data this way is that we reduce code duplication, 
+-- as Cool doesn't have generic types and there are usages of the Node class for storing integers,
 -- strings, other linked lists, and graph edges. Without this approach we would instead have to create separate classes (such as IntNode, StringNode, LinkedListNode, MSTEdgeNode, EdgeNode etc.).
 -- The main downside of this approach is that we would have to convert values from Object back to their original types every time when we want to use them.
     data: Object;
