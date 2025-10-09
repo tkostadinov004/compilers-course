@@ -17,7 +17,7 @@ class MSTEdge {
 
 class MST {
     edges: LinkedList;
-    edgesCount: Int; -- the target amount of edges in the MST
+    verticesCount: Int; -- the target amount of vertices in the MST ()
 
     reinterpret_cast_linkedList(val: Object): LinkedList {{
         let dummy: LinkedList in {
@@ -55,9 +55,9 @@ class MST {
         }
     };
 
-    init(iedges: LinkedList, verticesCount: Int): MST {{
+    init(iedges: LinkedList, iverticesCount: Int): MST {{
         edges <- iedges; --copying only the pointer value (won't create an issue when using, unless original list is changed; would be a better approach to copy all data again)
-        edgesCount <- verticesCount - 1;
+        verticesCount <- iverticesCount; -- count of MST vertices = |V|, count of MST edges = |V| - 1, where |V| is the number of vertices in the input graph
         self;
     }};
 
@@ -83,15 +83,15 @@ class MST {
     kruskal(): LinkedList {{
         sortEdges();
 
-        let result: LinkedList <- new LinkedList, i: Int <- 0, uf: UnionFind <- (new UnionFind).init(edgesCount + 1) in {
+        let result: LinkedList <- new LinkedList, i: Int <- 0, uf: UnionFind <- (new UnionFind).init(verticesCount) in {
             while not (edges.getSize() <= i) loop {
-                if not (edges.getSize() <= edgesCount) then {
+                if not (edges.getSize() <= verticesCount - 1) then {
                         let curr: MSTEdge <- reinterpret_cast_edge(edges.at(i)) in {
                         if uf.union(curr.getSource(), curr.getDest()) then {
                             result.add(curr);
                         } else {result;} fi;
                     };
-                } else {edgesCount;} fi;
+                } else {verticesCount;} fi;
                 i <- i + 1;
             } pool;
             result;

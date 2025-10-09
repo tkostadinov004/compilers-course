@@ -1,4 +1,4 @@
-class UnionFind inherits IO {
+class UnionFind {
     parents: LinkedList;
     heights: LinkedList;
 

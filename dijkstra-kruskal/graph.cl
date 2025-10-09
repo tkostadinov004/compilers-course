@@ -97,7 +97,7 @@ class Graph {
         let distances: LinkedList <- new LinkedList,
             pq: PriorityQueue <- (new PriorityQueue).init() in {
                 fillDistances(distances, start);
-                pq.push((new Edge).init(0, 0));
+                pq.push((new Edge).init(start, 0));
                 while not (pq.isEmpty()) loop {
                     let curr: Edge <- pq.pop() in {
                         let currAdjList: LinkedList <- reinterpret_cast_linkedList(adjList.at(curr.getDest())),
