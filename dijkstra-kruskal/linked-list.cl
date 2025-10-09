@@ -56,11 +56,11 @@ class LinkedList {
         } fi;
     }};
 
-    find(el: Object): Node { -- returns the Node object containing a given element
+    find(el: Object): Node {
         iFind(el, head)
     };
 
-    iat(index: Int): Node {{ -- returns the Node object at a given index or halts the execution if the index is invalid
+    iat(index: Int): Node {{
         if index < 0 then {abort(); new Node;} else {
             if size <= index then {abort(); new Node;} else {
                 let temp: Node <- head in {
