@@ -17,7 +17,7 @@ class MSTEdge {
 
 class MST {
     edges: LinkedList;
-    verticesCount: Int; -- the target amount of vertices in the MST ()
+    verticesCount: Int; -- the target amount of vertices in the MST
 
     reinterpret_cast_linkedList(val: Object): LinkedList {{
         let dummy: LinkedList in {
