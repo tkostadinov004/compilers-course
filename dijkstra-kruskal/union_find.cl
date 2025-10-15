@@ -1,3 +1,12 @@
+(*
+    An implementation of the disjoint set data structure that's used in Kruskal's algorithm 
+    for finding a minimum spanning tree (if the graph is connected) or a minimum spanning forest (if the graph is not connected)
+
+    The disjoint sets are ranked by height. Path compression is also implemented.
+
+    The significance of the union find data structure for Kruskal's algorithm specifically is that each disjoint set
+    represents a connected component in the graph
+*)
 class UnionFind {
     parents: LinkedList;
     heights: LinkedList;
@@ -19,7 +28,7 @@ class UnionFind {
         heights <- new LinkedList;
 
         let i: Int <- 0 in {
-            while not (size <= i) loop {
+            while i < size loop {
                 parents.add(i);
                 heights.add(0);
                 i <- i + 1;
@@ -34,6 +43,10 @@ class UnionFind {
         } fi;
     }};
 
+    (*
+        Puts the two elements in a single set.
+        Returns: true if the elements are added into a single set, false if the elements were already in a single set
+    *)
     union(first: Int, second: Int): Bool {{
         let p1: Int <- findParent(first), p2: Int <- findParent(second),
             h1: Int <- reinterpret_cast_int(heights.at(p1)), h2: Int <- reinterpret_cast_int(heights.at(p2)) in {

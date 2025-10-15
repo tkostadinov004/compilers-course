@@ -23,13 +23,13 @@ class Main {
         };
     }};
 
-    main() : Object {{
+    read_graph(): Graph {{
         let vertices: Int <- io.in_int(), 
             i: Int <- 0, 
             graph: Graph <- (new Graph).init(vertices) in {
-            while not (vertices <= i) loop {
+            while i < vertices loop {
                 let adjCount: Int <- io.in_int(), j: Int <- 0 in {
-                    while not (adjCount <= j) loop {
+                    while j < adjCount loop {
                         let curr: Int <- io.in_int() in {
                             graph.add(i, curr);
                         };
@@ -38,6 +38,12 @@ class Main {
                 };
                 i <- i + 1;
             } pool;
+            graph;
+        };
+    }};
+
+    main() : Object {{
+        let graph: Graph <- read_graph() in {
             graph.print();
 
             let dfsStart: Int <- io.in_int() in {

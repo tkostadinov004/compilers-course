@@ -1,3 +1,6 @@
+(*
+    a representation of an outgoing edge in a weighted graph
+*)
 class Edge {
     dest: Int;
     weight: Int;
@@ -15,7 +18,7 @@ class Edge {
 class Graph {
     adjList: LinkedList;
     io: IO <- new IO;
-    intMax: Int <- 2147483647;
+    intMax: Int <- 2147483647; -- the maximum possible value of Int in Cool (2^32 - 1)
 
     reinterpret_cast_linkedList(val: Object): LinkedList {{
         let dummy: LinkedList in {
@@ -78,6 +81,10 @@ class Graph {
         self;
     }};
 
+    (*
+        Adds an edge to the graph.
+        Returns: the current instance of the Graph
+    *)
     add(begin: Int, end: Int, weight: Int): Graph {{ -- assuming the graph is directed
         reinterpret_cast_linkedList(adjList.at(begin)).add((new Edge).init(end, weight));
         self;
@@ -85,7 +92,7 @@ class Graph {
 
     fillDistances(distances: LinkedList, start: Int): LinkedList {{
         let index: Int <- 0 in {
-            while not (adjList.getSize() <= index) loop {
+            while index < adjList.getSize() loop {
                 distances.add({if index = start then 0 else intMax fi;});
                 index <- index + 1;
             } pool;
@@ -93,6 +100,9 @@ class Graph {
         };
     }};
 
+    (*
+        Returns: the shortest distance between vertex 'start' and vertex 'end'
+    *)
     dijkstra(start: Int, end: Int): Int {{
         let distances: LinkedList <- new LinkedList,
             pq: PriorityQueue <- (new PriorityQueue).init() in {
@@ -103,17 +113,21 @@ class Graph {
                         let currAdjList: LinkedList <- reinterpret_cast_linkedList(adjList.at(curr.getDest())),
                             distanceToCurr: Int <- reinterpret_cast_int(distances.at(curr.getDest())),
                             index: Int <- 0 in {
-                            while not (currAdjList.getSize() <= index) loop {
-                                let currAdj: Edge <- reinterpret_cast_edge(currAdjList.at(index)),
-                                    distanceToAdj: Int <- reinterpret_cast_int(distances.at(currAdj.getDest())),
-                                    distanceFromCurrToAdj: Int <- distanceToCurr + currAdj.getWeight() in {
-                                        if distanceFromCurrToAdj < distanceToAdj then {
-                                            distances.iat(currAdj.getDest()).setData(distanceFromCurrToAdj);
-                                            pq.push((new Edge).init(currAdj.getDest(), distanceFromCurrToAdj));
-                                        } else {index;} fi;
-                                        index <- index + 1;
-                                    };
-                            } pool;
+                            if not (isvoid currAdjList) then {
+                                if not (isvoid distanceToCurr) then {
+                                    while index < currAdjList.getSize() loop {
+                                    let currAdj: Edge <- reinterpret_cast_edge(currAdjList.at(index)),
+                                        distanceToAdj: Int <- reinterpret_cast_int(distances.at(currAdj.getDest())),
+                                        distanceFromCurrToAdj: Int <- distanceToCurr + currAdj.getWeight() in {
+                                            if distanceFromCurrToAdj < distanceToAdj then {
+                                                distances.iat(currAdj.getDest()).setData(distanceFromCurrToAdj);
+                                                pq.push((new Edge).init(currAdj.getDest(), distanceFromCurrToAdj));
+                                            } else {index;} fi;
+                                            index <- index + 1;
+                                        };
+                                    } pool;
+                                } else {abort(); 0;} fi;
+                            } else {abort(); 0;} fi;
                         };
                     };
                 } pool;
@@ -121,9 +135,12 @@ class Graph {
             };
     }};
 
+    (*
+        Prints the adjacency list representation of the graph
+    *)
     print() : Object {{
         let i: Int <- 0 in {
-            while not (adjList.getSize() <= i) loop {
+            while i < adjList.getSize() loop {
                 let currAdj: LinkedList <- reinterpret_cast_linkedList(adjList.at(i)) in {
                     io.out_int(i).out_string(": ");
                     print_pairs(currAdj);

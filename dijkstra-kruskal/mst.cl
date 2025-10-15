@@ -61,11 +61,14 @@ class MST {
         self;
     }};
 
+    (*
+        Returns: the list of edges of the graph sorted in ascending order by their weight
+    *)
     sortEdges(): LinkedList {{
         let i: Int <- 0 in {
-            while not (edges.getSize() <= i) loop {
+            while i < edges.getSize() loop {
                 let minIndex: Int <- i, j: Int <- i + 1 in {
-                    while not (edges.getSize() <= j) loop {
+                    while j < edges.getSize() loop {
                         if reinterpret_cast_edge(edges.at(j)).getWeight() < reinterpret_cast_edge(edges.at(minIndex)).getWeight()
                             then {
                                 minIndex <- j;
@@ -80,11 +83,15 @@ class MST {
         edges;
     }};
 
+    (*
+        Builds a minimum spanning tree/forest using Kruskal's algorithm, based on a list of weighted graph edges
+        Returns: A list of edges of the resulting minimum spanning tree/forest
+    *)
     kruskal(): LinkedList {{
         sortEdges();
 
         let result: LinkedList <- new LinkedList, i: Int <- 0, uf: UnionFind <- (new UnionFind).init(verticesCount) in {
-            while not (edges.getSize() <= i) loop {
+            while i < edges.getSize() loop {
                 if not (edges.getSize() <= verticesCount - 1) then {
                         let curr: MSTEdge <- reinterpret_cast_edge(edges.at(i)) in {
                         if uf.union(curr.getSource(), curr.getDest()) then {
@@ -98,9 +105,12 @@ class MST {
         };
     }};
 
+    (*
+        Calculates the total cost of the minimum spanning tree/forest.
+    *)
     totalCost(): Int {{
         let mst: LinkedList <- kruskal(), sum: Int <- 0, i: Int <- 0 in {
-            while not (mst.getSize() <= i) loop {
+            while i < mst.getSize() loop {
                 sum <- sum + (reinterpret_cast_edge(mst.at(i)).getWeight());
                 i <- i + 1;
             } pool;

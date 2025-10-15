@@ -1,4 +1,8 @@
 class Node {
+-- the type of values in each node is Object. The main advantage of keeping data this way is that we reduce code duplication, 
+-- as Cool doesn't have generic types and there are usages of the Node class for storing integers,
+-- strings, other linked lists, and graph edges. Without this approach we would instead have to create separate classes (such as IntNode, StringNode, LinkedListNode, MSTEdgeNode, EdgeNode etc.).
+-- The main downside of this approach is that we would have to convert values from Object back to their original types every time when we want to use them.
     data: Object;
     prev: Node;
     next: Node;
@@ -26,11 +30,18 @@ class Node {
     setNext(inext: Node): Node {next <- inext};
 };
 
+(*
+    An implementation of a doubly-linked list with a head and a tail.
+*)
 class LinkedList inherits IO {
     head: Node;
     tail: Node;
-    size: Int;
+    size: Int <- 0;
 
+    (*
+        Adds an element to the back of the linked list. The method is synonymous with 'push_back' in C++
+        Returns: the current instance of LinkedList
+    *)
     add(el: Object): LinkedList {{
         if isvoid head then {
             head <- new Node;
@@ -53,13 +64,16 @@ class LinkedList inherits IO {
         } fi;
     }};
 
+    (*
+        Returns: the concrete Node containing a given element or void if such an element is not present in the list
+    *)
     find(el: Object): Node {
         iFind(el, head)
     };
 
     iat(index: Int): Node {{
-        if index < 0 then {abort(); new Node;} else {
-            if size <= index then {abort(); new Node;} else {
+        if 0 <= index then {
+            if index < size then {
                 let temp: Node <- head in {
                     while not (index = 0) loop {
                         temp <- temp.getNext();
@@ -67,20 +81,30 @@ class LinkedList inherits IO {
                     } pool;
                     temp;
                 };
-            } fi;
-        } fi;
+            } else {abort(); new Node;} fi;
+        } else {abort(); new Node;} fi;
     }};
 
+    (*
+        Returns: the element at a given index or void if the index is invalid
+    *)
     at(index: Int): Object {{
         let result: Node <- iat(index), dummy: Object in {
             if isvoid result then dummy else result.getData() fi;
         };
     }};
 
+    (*
+        Returns: true, if the given element is present in the linked list, false otherwise
+    *)
     contains(el: Object): Bool {
         not (isvoid (find(el)))
     };
 
+    (*
+        Removes a given element from the linked list.
+        Returns: true, if such an element was found and removed, false otherwise
+    *)
     remove(el: Object): Bool {{
         let removalNode: Node <- find(el), dummy: Node in {
             if isvoid removalNode then false else {
@@ -100,6 +124,10 @@ class LinkedList inherits IO {
         };
     }};
 
+    (*
+        Removes an element from the front of the linked list.
+        Aborts: when the list is empty
+    *)
     pop_front(): Object {{
         if isvoid head then {abort(); new Object;} else {
             let removedValue: Object <- head.getData(), dummy: Node in {
@@ -115,6 +143,10 @@ class LinkedList inherits IO {
         } fi;
     }};
 
+    (*
+        Removes an element from the back of the linked list.
+        Aborts: when the list is empty
+    *)
     pop_back(): Object {{
         if isvoid tail then {abort(); new Object;} else {
             let removedValue: Object <- tail.getData(), dummy: Node in {
@@ -130,6 +162,9 @@ class LinkedList inherits IO {
         } fi;
     }};
 
+    (*
+        Swaps the elements at two indices in the linked list.
+    *)
     swap(firstIndex: Int, secondIndex: Int): LinkedList {{
         let first: Node <- iat(firstIndex), second: Node <- iat(secondIndex), temp: Object <- first.getData() in {
             first.setData(second.getData());

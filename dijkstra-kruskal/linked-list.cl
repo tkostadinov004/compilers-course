@@ -30,11 +30,18 @@ class Node {
     setNext(inext: Node): Node {next <- inext};
 };
 
+(*
+    An implementation of a doubly-linked list with a head and a tail.
+*)
 class LinkedList {
     head: Node;
     tail: Node;
-    size: Int;
+    size: Int <- 0;
 
+    (*
+        Adds an element to the back of the linked list. The method is synonymous with 'push_back' in C++
+        Returns: the current instance of LinkedList
+    *)
     add(el: Object): LinkedList {{
         if isvoid head then {
             head <- new Node;
@@ -57,13 +64,16 @@ class LinkedList {
         } fi;
     }};
 
+    (*
+        Returns: the concrete Node containing a given element or void if such an element is not present in the list
+    *)
     find(el: Object): Node {
         iFind(el, head)
     };
 
     iat(index: Int): Node {{
-        if index < 0 then {abort(); new Node;} else {
-            if size <= index then {abort(); new Node;} else {
+        if 0 <= index then {
+            if index < size then {
                 let temp: Node <- head in {
                     while not (index = 0) loop {
                         temp <- temp.getNext();
@@ -71,20 +81,30 @@ class LinkedList {
                     } pool;
                     temp;
                 };
-            } fi;
-        } fi;
+            } else {abort(); new Node;} fi;
+        } else {abort(); new Node;} fi;
     }};
 
+    (*
+        Returns: the element at a given index or void if the index is invalid
+    *)
     at(index: Int): Object {{
         let result: Node <- iat(index), dummy: Object in {
             if isvoid result then dummy else result.getData() fi;
         };
     }};
 
+    (*
+        Returns: true, if the given element is present in the linked list, false otherwise
+    *)
     contains(el: Object): Bool {
         not (isvoid (find(el)))
     };
 
+    (*
+        Removes a given element from the linked list.
+        Returns: true, if such an element was found and removed, false otherwise
+    *)
     remove(el: Object): Bool {{
         let removalNode: Node <- find(el) in {
             if isvoid removalNode then false else {
@@ -104,6 +124,10 @@ class LinkedList {
         };
     }};
 
+    (*
+        Removes an element from the front of the linked list.
+        Aborts: when the list is empty
+    *)
     pop_front(): Object {{
         if isvoid head then {abort(); new Object;} else {
             let removedValue: Object <- head.getData(), dummy: Node in {
@@ -119,6 +143,10 @@ class LinkedList {
         } fi;
     }};
 
+    (*
+        Removes an element from the back of the linked list.
+        Aborts: when the list is empty
+    *)
     pop_back(): Object {{
         if isvoid tail then {abort(); new Object;} else {
             let removedValue: Object <- tail.getData(), dummy: Node in {
@@ -134,6 +162,9 @@ class LinkedList {
         } fi;
     }};
 
+    (*
+        Swaps the elements at two indices in the linked list.
+    *)
     swap(firstIndex: Int, secondIndex: Int): LinkedList {{
         let first: Node <- iat(firstIndex), second: Node <- iat(secondIndex), temp: Object <- first.getData() in {
             first.setData(second.getData());

@@ -2,13 +2,13 @@ class Main {
     io: IO <- new IO;
 
     main() : Object {{
-        let vertices: Int <- io.in_int(), 
+       let vertices: Int <- io.in_int(), 
             i: Int <- 0, 
             graph: Graph <- (new Graph).init(vertices),
             edges: LinkedList <- new LinkedList in {
-            while not (vertices <= i) loop {
+            while i < vertices loop {
                 let adjCount: Int <- io.in_int(), j: Int <- 0 in {
-                    while not (adjCount <= j) loop {
+                    while j < adjCount loop {
                         let curr: Int <- io.in_int(), weight: Int <- io.in_int() in {
                             graph.add(i, curr, weight);
                             edges.add((new MSTEdge).init(i, curr, weight));

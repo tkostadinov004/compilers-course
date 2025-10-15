@@ -59,11 +59,18 @@ class Graph {
         self;
     }};
 
+    (*
+        Adds an edge to the graph.
+        Returns: the current instance of the Graph
+    *)
     add(begin: Int, end: Int): Graph {{ -- assuming the graph is directed
         reinterpret_cast_linkedList(adjList.at(begin)).add(end);
         self;
     }};
 
+    (*
+        Returns: a Depth-first search ordering of the vertices of the graph, starting from a given vertex
+    *)
     dfs(startVertex: Int): LinkedList {{
         let result: LinkedList <- new LinkedList, 
             visited: LinkedList <- new LinkedList,
@@ -71,26 +78,33 @@ class Graph {
                 stack.add(startVertex);
                 while not (stack.isEmpty()) loop {
                     let curr: Int <- reinterpret_cast_int(stack.pop_back()) in {
-                        if visited.contains(curr) then {curr;} else {
-                            result.add(curr);
-                            visited.add(curr);
-                            let currAdjList: LinkedList <- reinterpret_cast_linkedList(adjList.at(curr)),
-                                index: Int <- 0 in {
-                                while not (currAdjList.getSize() <= index) loop {
-                                    stack.add(currAdjList.at(index));
-                                    index <- index + 1;
-                                } pool;
-                            };
-                        } fi;
+                        if not (isvoid curr) then {
+                            if visited.contains(curr) then {curr;} else {
+                                result.add(curr);
+                                visited.add(curr);
+                                let currAdjList: LinkedList <- reinterpret_cast_linkedList(adjList.at(curr)),
+                                    index: Int <- 0 in {
+                                    if not (isvoid currAdjList) then {
+                                        while index < currAdjList.getSize() loop {
+                                            stack.add(currAdjList.at(index));
+                                            index <- index + 1;
+                                        } pool;
+                                    } else {abort(); result;} fi;
+                                };
+                            } fi;
+                        } else {abort(); result;} fi;
                     };
                 } pool;
                 result;
         };
     }};
 
+    (*
+        Prints the adjacency list representation of the graph
+    *)
     print() : Object {{
         let i: Int <- 0 in {
-            while not (adjList.getSize() <= i) loop {
+            while i < adjList.getSize() loop {
                 let currAdj: LinkedList <- reinterpret_cast_linkedList(adjList.at(i)) in {
                     io.out_int(i).out_string(": ");
                     print_ints(currAdj);
