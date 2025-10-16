@@ -18,7 +18,7 @@ class Edge {
 class Graph {
     adjList: LinkedList;
     io: IO <- new IO;
-    intMax: Int <- 2147483647; -- the maximum possible value of Int in Cool (2^32 - 1)
+    intMax: Int <- 2147483647; -- the maximum possible value of Int in Cool (2^31 - 1)
 
     reinterpret_cast_linkedList(val: Object): LinkedList {{
         let dummy: LinkedList in {
